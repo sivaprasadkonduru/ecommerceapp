@@ -26,7 +26,7 @@ class Stores(models.Model):
 
 
 class Products(models.Model):
-    store_id=models.ForeignKey(Stores, on_delete=models.CASCADE)
+    store_id = models.ForeignKey(Stores, related_name='store_prod', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     price = models.FloatField()
     quantity = models.IntegerField()
@@ -36,10 +36,5 @@ class Products(models.Model):
     ratings = models.CharField(max_length=10)
     return_policy = models.CharField(max_length=5, choices=RETURN_POLICY, default='Y')
 
-
-
-
-
-
-
-
+    def __str__(self):
+        return '-'.join([self.store_id.name, self.store_id.location])

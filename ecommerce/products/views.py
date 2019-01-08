@@ -1,7 +1,17 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+#builtin imports
+import os
+
+# third-party imports
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic.edit import CreateView, FormView
+from django.views.generic.list import ListView
+from django.urls import reverse
+
+# project-level imports
 from .models import Stores
-# Create your views here.
+from .forms import StoreForm
+
 
 def add_store_details(request):
 
@@ -21,6 +31,62 @@ def get_store_details(request):
 
     data = Stores.objects.all()
     return render(request, 'store_details.html', {'store_data': data})
+
+
+class StoreView(ListView):
+
+    model = Stores
+    query_set = Stores.objects.all()
+    template_name = 'store_details.html'
+    context_object_name = 'store_data'
+    ordering = 'name'
+
+
+def success(request):
+    return render(request, 'success.html')
+
+
+def add_details_using_form(request):
+    if request.method == 'POST':
+        form = StoreForm(request.POST)
+        if form.is_valid():
+            #Simport pdb;pdb.set_trace()
+            obj = Stores()
+            obj.name = form.cleaned_data['name']
+            obj.address = form.cleaned_data['address']
+            obj.landmark = form.cleaned_data['landmark']
+            obj.email = form.cleaned_data['email']
+            obj.location = form.cleaned_data['location']
+            obj.contact_no = form.cleaned_data['contact_no']
+            obj.save()
+        else:
+            raise form.ValidationErrors
+        return HttpResponseRedirect(reverse('success'))
+    else:
+        form = StoreForm()
+
+    return render(request, 'add_details.html', {'form': form})
+
+
+'''class AddStoreDetailsView(FormView):
+    template_name = 'add_details.html'
+    form_class = StoreForm
+    success_url = '/success'
+
+    def form_valid(self, form):
+        import pdb;pdb.set_trace()
+        #details = Stores.objects.get_or_create()
+        form.save()
+        #form.save(for_list=details)
+        #return redirect(details)
+        return redirect(self.success_url)'''
+
+
+
+
+
+
+
 
 
 
