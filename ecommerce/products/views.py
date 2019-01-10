@@ -9,8 +9,8 @@ from django.views.generic.list import ListView
 from django.urls import reverse
 
 # project-level imports
-from .models import Stores
-from .forms import StoreForm
+from .models import Stores, Products
+from .forms import StoreForm, ProductsForm
 
 
 def add_store_details(request):
@@ -80,6 +80,30 @@ def add_details_using_form(request):
         #form.save(for_list=details)
         #return redirect(details)
         return redirect(self.success_url)'''
+
+
+class AddProductsView(FormView):
+
+    template_name = 'products.html'
+    form_class = ProductsForm
+    success_url = '/success'
+
+    def form_valid(self, form):
+        form.save()
+        return redirect(self.success_url)
+
+
+class ProductsView(ListView):
+
+    model = Products
+    query_set = Products.objects.all()
+    template_name = 'products_details.html'
+    context_object_name = 'products_data'
+
+
+
+
+
 
 
 
