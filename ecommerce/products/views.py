@@ -15,7 +15,7 @@ from .forms import StoreForm
 
 def add_store_details(request):
 
-    with open(r'C:\Users\User\workspace\stores.txt') as std:
+    with open(r'D:\stores.txt') as std:
         store_data = std.readlines()
         for sd in store_data[1:]:
             data = sd.split(',')
