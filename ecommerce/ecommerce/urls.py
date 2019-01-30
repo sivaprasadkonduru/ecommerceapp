@@ -19,5 +19,6 @@ from products.views import add_store_details, get_store_details
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'store/', include('products.urls'))
+    url(r'store/', include('products.urls')),
+    url(r'api/', include('products.rest_urls'))
 ]

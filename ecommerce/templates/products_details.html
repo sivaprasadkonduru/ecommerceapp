@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load tmp_filters %}
 <body>
 {% block content %}
 <h1 align="center"> Django Ecommerce Application </h1>
@@ -19,12 +20,12 @@
     <tr>
         <td> {{ data.store_id }} </td>
         <td> {{ data.name }} </td>
-        <td> {{ data.price }} </td>
+        <td> {{ data.price |add:20 }} </td>
         <td> {{ data.quantity }} </td>
         <td> {{ data.category }} </td>
         <td> {{ data.exp_date }} </td>
         <td> {{ data.reviews }} </td>
-        <td> {{ data.ratings }} </td>
+        <td> {{ data.ratings | convert_digit_to_word}} </td>
         <td> {{ data.return_policy }} </td>
     </tr>
 

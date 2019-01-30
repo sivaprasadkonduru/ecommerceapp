@@ -7,10 +7,15 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
 from django.urls import reverse
+from django.views.decorators.cache import cache_page
 
 # project-level imports
 from .models import Stores, Products
 from .forms import StoreForm, ProductsForm
+
+
+def home_view(request):
+    return render(request, "base.html")
 
 
 def add_store_details(request):
@@ -47,6 +52,7 @@ def success(request):
 
 
 def add_details_using_form(request):
+    import pdb;pdb.set_trace()
     if request.method == 'POST':
         form = StoreForm(request.POST)
         if form.is_valid():
@@ -99,6 +105,14 @@ class ProductsView(ListView):
     query_set = Products.objects.all()
     template_name = 'products_details.html'
     context_object_name = 'products_data'
+
+
+@cache_page(10*60)
+def no_of_visits(request):
+    visit = request.session.get('visits', 0)
+    request.session['visits'] = visit + 1
+    return render(request, 'store_details.html', {'visits': request.session['visits']})
+
 
 
 
